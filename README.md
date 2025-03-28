@@ -155,6 +155,41 @@ Best practises:
 * **Use Data Sources instead of hardcoding values and for dynamic resource search**
 * **Use ```try()```** to catch errors
 ## Variables
+Variables are used to parameterize the configuration, they allow for:
+* dynamically passing values \(e.g. cloud region, instance size\)
+* avoiding hardcoding sensitive data \(API keys, passwords\)
+* creating reusable modules and environments \(dev/prod\)
+
+Variables consist of:
+* **type** - variable type, they are divided on simple \(e.g. string, number, bool\) and complex \(list, set, map, object, any - avoid any if possible\)
+* **default** - optional, default value \(unless other specified\)
+* **description** - documentation
+* **sensitive** - hides value in outputs \(e.g. passwords\)
+* **validation** - value validation rules
+
+Define your variables in **variables.tf** using **variable** block:
+```
+variable <name> {
+  type        = <type>
+  default     = <default_value>
+  description = <description>
+  sensitive   = <true_or_false>
+  
+  validation {
+    condition     = <condition>
+    error_message = <error_message>
+  }
+}
+```
+
+There are several ways to pass variable values to configuration files:
+* **Use ```-var=<name>=<value>``` option in commands**
+* **Use .tfvars file with ```-var-file=<var_file>``` option in commands**
+* **Use environment variables in TF_VAR_\<variable_name\> format**
+* **Use default values from variable declarations**\
+First 2 methods have highest priority, then third, then fourth.
+
+To reference variable in configuration files use ```var.<variable_name>```.
 ## Outputs
 ## Commands
 ## Shared State
