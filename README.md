@@ -64,6 +64,7 @@ Best practises:
 ## Resources
 ## Data Sources
 ## Variables
+## Outputs
 ## Commands
 ## Shared State
 ## Modules
