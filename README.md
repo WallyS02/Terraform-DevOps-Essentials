@@ -62,6 +62,68 @@ Best practises:
   }
   ```
 ## Resources
+Resource is the fundamental building block of infrastructure in Terraform. It represents a specific object in a cloud or service that you want to create, modify, or delete \(e.g. an virtual server, a managed database, a firewall rule\).\
+Each resource defines:
+* **Type** - type of resource \(e.g. aws_instance\)
+* **Name** - unique name used for references within Terraform
+* **Arguments** - resource-specific configuration \(e.g. ami, instance_type for EC2\)
+* **Meta-arguments** - special parameters controlling the behavior of the resource \(e.g. count, lifecycle\)
+* **Attributes** - output data \(available after creation\), see Outputs
+
+To define resource use **resource** block:
+```
+resource <type> <name> {
+  # Arguments
+  <argument1> = <value1>
+  <argument2> = <value2>
+
+  # Meta-arguments (optional)
+  depends_on  = [resource.<resource_name>]      # forces creation order
+  count       = <instance_number>               # creates multiple, identical resources
+  for_each    = var.<items>                     # creates resource from map/set by iterating over them
+  provider    = <provider_alias>                # alternative provider using alias
+  lifecycle {                                   # lifecycle policies
+    prevent_destroy = <true_or_false>           # blocks accidental deletion
+    ignore_changes  = [<tag1>, <tag2>, ...]     # ignore tag changes \(e.g. after manual editing\)
+    create_before_destroy = <true_or_false>     # zero downtime replacement
+  }                             
+}
+```
+Dependencies are automatically detected by Terraform but you can force them, e.g.
+```
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_subnet" "example" {
+  vpc_id     = aws_vpc.main.id # explicit dependency
+  cidr_block = "10.0.1.0/24"
+}
+```
+To construct repeated nested block arguments dynamically in resource-type blocks use **dynamic** block:
+```
+resource <type> <name> {
+  # body of the resource block
+
+  dynamic  <label>  {                            # specifies the kind of repeated nested block to generate
+    for_each = <complex_value_to_iterate_over>   # specifies the complex value (common collections used are either list or map) to iterate over
+    iterator = <iterator_name>                   # optional, specifies a name that represents the current element of the complex value being iterated over
+
+    content {
+      # body of the dynamic block generated, e.g.
+      from_port   = <iterator_name>.<from_port>
+      to_port     = <iterator_name>.<to_port>
+      protocol    = <protocol>
+    }
+  }
+}
+```
+Best practises:
+* **Use unique resource names**
+* **Place reusable resources in modules**
+* **Use variables and outputs**
+* **Always remember about shared state**
+* **Use ```terraform plan``` before applying**
 ## Data Sources
 ## Variables
 ## Outputs
