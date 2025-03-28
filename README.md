@@ -125,6 +125,35 @@ Best practises:
 * **Always remember about shared state**
 * **Use ```terraform plan``` before applying**
 ## Data Sources
+Data Source is a mechanism that allows you to read information about existing resources \(created manually or by other Terraform code\) without managing them which is crucial when integrating with manually managed or managed by other systems resources with your IaC code.\
+They are read-only and fetched during execution of ```terraform apply```.
+
+To define data source use **data** block:
+```
+data <provider_type> <name> {
+  # Search arguments
+  <argument1> = <value1>
+  <argument2> = <value2>
+
+  # Search filters
+  filter {
+    name   = <key>
+    values = [<value1>, <value2>]
+  }
+}
+```
+To use data source in resources refer to it via data.\<provider_type\>.\<name\>.\<attribute\>, e.g.
+```
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.ubuntu.id  # use AMI from data source
+  instance_type = "t3.micro"
+}
+```
+Dependencies are automatically detected by Terraform, if data source is dependent on some resource, Terraform will create this resource first.
+
+Best practises:
+* **Use Data Sources instead of hardcoding values and for dynamic resource search**
+* **Use ```try()```** to catch errors
 ## Variables
 ## Outputs
 ## Commands
