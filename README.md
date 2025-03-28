@@ -1,10 +1,14 @@
-# Terraform-DevOps-Essentials
+# Terraform DevOps Essentials
 ## If I'll find any other feature to be useful - it'll surely be added!
-## LocalStack
+## Infrastructure as Code
 ## How it works?
 ## Basics
+## Commands
 ## Providers
 ## Resources
 ## Variables
-## Shared state
+## Shared State
 ## Modules
+## LocalStack
+## Checkov
+## Infracost
