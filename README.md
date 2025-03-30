@@ -319,6 +319,13 @@ Best practises:
 * **Design single responsibility modules**
 * **Isolate state for each module**
 ## Workspaces
+Workspace is a mechanism that allows you to store separate states \(tfstate\) and variable values for the same configuration. This allows for isolating different environments without duplicating code.
+
+Use earlier described commands to manage workspaces.
+
+You can use workspace-specific values of variables to prepare proper environments.\
+Secure production workspace from accidental deletion.\
+If the environments are too different, use separate configurations rather that workspaces.
 ## Best Practises
 ## LocalStack
 ## Checkov
