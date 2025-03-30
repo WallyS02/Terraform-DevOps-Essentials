@@ -280,6 +280,44 @@ Best practises:
 * **Use plan before apply** to avoid unpleasant surprises
 * **NEVER change the state manually** - use the commands provided for this
 ## Modules
+Module is a self-contained, reusable component that groups related resources, variables, and outputs. It can be thought of as a "function" in programming.
+
+Example module directory structure:
+```
+modules/
+└── <module_name>/
+    ├── main.tf          # main resource configuration
+    ├── variables.tf     # input variables
+    ├── outputs.tf
+    └── README.md
+```
+
+Modules can have different sources:
+* **Local** - simple, no versioning, use with ```source = "./modules/<module_name>"```
+* **Terraform Registry** - public, ready-made solutions, with versioning, e.g. use with ```source = "terraform-aws-modules/<path_to_module>"```
+* **Git** - fully controlled and versioned, e.g. use with ```source = "git::https://github.com/<user_or_organization>/<repo_name>.git//modules/<module_name>?ref=<module_version>"```
+* **S3/GCS/HTTP** - fully controlled and versioned, e.g. use with ```source = "s3::https://s3-<region>.amazonaws.com/<bucket-name>/modules/<module_name>.zip"```
+
+To use modules use **module** block in main configuration:
+```
+module <module_name> {
+  source = <module_source>
+  version = <module_version>
+  
+  # Input variables values
+  <variable1>         = <value1>
+  <variable2>         = [<value2>, <value3>]
+}
+
+# Using module output example
+resource <type> <name> {
+  subnet_id = module.prod_vpc.public_subnet_ids[0]  # "public_subnet_ids" module output "public_subnet_ids"
+}
+```
+
+Best practises:
+* **Design single responsibility modules**
+* **Isolate state for each module**
 ## Workspaces
 ## Best Practises
 ## LocalStack
