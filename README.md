@@ -236,6 +236,49 @@ Best practises:
 * **Isolate different environments and components \(VPC, databases\) state files** by configuring different backends for them
 * **Use state versioning** to be able to roll back previous states
 ## Commands
+Essential commands:
+* **terraform init** - initializes working directory, downloads the required providers \(e.g. AWS\) and modules, configures the backend for the state
+  * **terraform init -upgrade** - updates provider version
+  * **terraform init -backend-config** - backend configuration \(e.g. for remote state\)
+* **terraform plan** - generates an execution plan – shows what will be added/changed/destroyed without applying any changes
+  * **terraform plan -out=\<plan_file\>** - saves plan to a file \(e.g. tfplan\) to use later in apply
+  * **terraform plan -var=\<name\>=\<value\>** - passes variables
+  * **terraform plan -var-file=\<var_file\>** - specifies variable file
+  * **terraform plan -destroy** - generates a plan for the destruction of infrastructure
+* **terraform apply** - applies changes in infrastructure
+  * **terraform apply \<plan\>** - applies previously generated plan
+  * **terraform apply -auto-approve** - skips interactive confirmation
+  * **terraform apply -var-file=\<var_file\>** - specifies variable file
+  * **terraform apply -parallelism=\<parallel_operations_number\>** - limits parallel operations, default number is 10
+* **terraform destroy** - destroys all resources defined in the configuration
+* **terraform state** - state management commands
+  * **terraform state list** - displays a list of all resources in the state
+  * **terraform state show \<resource_name\>** - shows details of a specified resource
+  * **terraform state mv \<old_name\> \<new_name\>** - changes the name of a resource in the state
+  * **terraform state rm \<resource_name\>** - removes resource from a state without destroying it in the infrastructure
+  * **terraform state pull** - pulls and displays the raw state
+* **terraform refresh** - synchronizes state with real infrastructure
+* **terraform get** - downloads and updates modules
+  * **terraform get -update** - forces modules update
+* **terraform validate** - checks the syntax of .tf files \(useful in CI/CD\)
+* **terraform fmt** - automatically formats configuration files to standard style
+  * **terraform fmt -recursive** - formats subdirectories too
+  * **terraform fmt -diff** - shows changes before committing
+  * **terraform fmt -check** - checks if files are formatted \(useful in CI/CD\)
+* **terraform console** - launches an interactive expression testing console
+* **terraform workspace** - workspaces management commands
+  * **terraform workspace new <name>** - creates a new workspace
+  * **terraform workspace select <name>** - switches to existing workspace
+  * **terraform workspace delete <name>** - removes workspace
+  * **terraform workspace list** - displays a list of all workspaces
+* **terraform import \<resource_name\> \<external_id\>** - imports an existing resource \(e.g. created manually\) to the state
+* **terraform output** - displays output values \(e.g. from outputs.tf\)
+  * **terraform output -json** - formats output to JSON
+* **terraform taint \<resource_name\>** - marks specified objects in the state as tainted \(resources will be deleted and recreated on the next apply\)
+
+Best practises:
+* **Use plan before apply** to avoid unpleasant surprises
+* **NEVER change the state manually** - use the commands provided for this
 ## Modules
 ## Workspaces
 ## Best Practises
