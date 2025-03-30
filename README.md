@@ -378,3 +378,17 @@ definition:
   value: null
 ```
 ## Infracost
+Infracost is an open-source tool for estimating the costs of cloud IaC which:
+* predicts monthly AWS/Azure/GCP resource costs based on Terraform configuration files
+* helps avoiding financial surprises after deployment
+* integrates with CI/CD tools
+
+Infracost parses .tf or .tfplan files to identificate resources and using official AWS/Azure/GCP pricing APIs returns a detailed monthly cost broken down by service.
+
+To use Infracost:
+1. Install Infracost with ```curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh```
+2. Configure free API key with ```infracost register```
+3. To parse Terraform directory use ```cd /path/to/terraform``` and ```infracost breakdown --path .``` to analyse costs of current configuration
+4. See cost raport
+
+To check how code changes will affect costs \(e.g. in a pull request\) use ```infracost diff --path . --compare-to main```.
