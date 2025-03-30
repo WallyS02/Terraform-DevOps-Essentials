@@ -326,7 +326,27 @@ Use earlier described commands to manage workspaces.
 You can use workspace-specific values of variables to prepare proper environments.\
 Secure production workspace from accidental deletion.\
 If the environments are too different, use separate configurations rather that workspaces.
-## Best Practises
 ## LocalStack
+LocalStack is described [here](https://github.com/WallyS02/AWS-DevOps-Essentials?tab=readme-ov-file#localstack).
+
+To use Terraform with LocalStack use provider configuration:
+```
+provider "aws" {
+  region                      = "us-east-1"  # LocalStack requires region but ignores it
+  access_key                  = "mock"       # dummy credentials
+  secret_key                  = "mock"
+  skip_credentials_validation = true         # skipping credential validation
+  skip_requesting_account_id  = true
+  skip_metadata_api_check     = true
+  s3_use_path_style           = true         # required for LocalStack
+
+  endpoints {
+    s3      = "http://localhost:4566"
+    dynamodb = "http://localhost:4566"
+    # Add endpoints for other services
+  }
+}
+```
+With provider configured as shown above, deploy infrastructure with Terraform as normally.
 ## Checkov
 ## Infracost
