@@ -207,8 +207,35 @@ To reference output use ```module.<module_name>.<output_name>```.
 Best practises:
 * **Use outputs to link modules**
 * **Export only what is really needed**
-## Commands
 ## Shared State
+State \(stored in the terraform.tfstate file\) is a map of the resources managed by Terraform, containing:
+* mappings of resources defined in code to real objects in the cloud or other platform
+* metadata \(e.g. IP addresses, configurations\)
+* dependencies between resources
+
+Shared state means that terraform.tfstate file is stored remotely \(e.g. AWS S3\) and not locally. This allows for synchronizing the work of team members, eliminating conflicts and inconsistencies by storing the current state.
+
+To define remote storage for shared state in configuration use **backend** block, e.g. AWS S3 + DynamoDB configuration:
+```
+terraform {
+  backend <name> {
+    bucket         = <bucket_name>
+    key            = <path_to_state_file>
+    region         = <region>
+    dynamodb_table = <table_name>          # DynamoDB table for locking
+    encrypt        = <true_or_false>       # state encryption
+  }
+}
+```
+
+To prevent user's race condition \(using ```terraform apply``` simultaneously, which could corrupt the state\) use locking. E.g. when using AWS S3 + DynamoDB for remote state storage Terraform inserts record in DynamoDB for the duration of the operation that locks state changes.
+
+Best practises:
+* **ALWAYS use remote state storage**
+* **Encrypt state to prevent sensitive data being compromised**
+* **Isolate different environments and components \(VPC, databases\) state files** by configuring different backends for them
+* **Use state versioning** to be able to roll back previous states
+## Commands
 ## Modules
 ## Workspaces
 ## Best Practises
