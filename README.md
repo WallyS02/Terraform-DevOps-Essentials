@@ -191,6 +191,22 @@ First 2 methods have highest priority, then third, then fourth.
 
 To reference variable in configuration files use ```var.<variable_name>```.
 ## Outputs
+Outputs are a mechanism for sharing read-only information about the deployed infrastructure with other modules and resources, users \(e.g. using ```terraform apply```\), or external systems \(e.g. CI/CD\).
+
+To define output use **output** block:
+```
+output <name> {
+  value       = <expression>                    # required, specifies information to export
+  description = <documentation>                 # optional
+  sensitive   = <true_or_false>                 # optional, false as default
+  depends_on  = [resource.<resource_name>]      # forces creation order
+}
+```
+To reference output use ```module.<module_name>.<output_name>```.
+
+Best practises:
+* **Use outputs to link modules**
+* **Export only what is really needed**
 ## Commands
 ## Shared State
 ## Modules
