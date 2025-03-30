@@ -349,4 +349,32 @@ provider "aws" {
 ```
 With provider configured as shown above, deploy infrastructure with Terraform as normally.
 ## Checkov
+Checkov is an open-source static code analysis tool \(SAST\) for IaC which:
+* detects security vulnerabilities and misconfigurations in Terraform configuration files
+* checks compliance with best practices and standards \(CIS, GDPR, HIPAA, PCI-DSS\)
+* integrates with CI/CD tools
+
+Checkov analyzes .tf or .tfplan files and compares configuration with over 2,500 built-in rules. After analysis it returns PASSED/FAILED check list with description and documentation url.
+
+To use Checkov:
+1. Install Checkov with ```pip install checkov```, install Python and Pip as prerequisite
+2. Scan Terraform directory with ```checkov -d /path/to/terraform``` or Terraform plan with ```checkov -f tfplan.json```
+3. See possible vulnerabilities detected by Checkov and fix them
+
+You can define custom rules with YAML or Python, e.g.
+```
+metadata:
+  name: ENSURE_LAMBDA_IN_VPC
+  id: CUSTOM_001
+category: NETWORKING
+scope:
+  provider: aws
+  resource: aws_lambda_function
+definition:
+  cond_type: attribute
+  resource_types: ["aws_lambda_function"]
+  attribute: "vpc_config"
+  operator: not_equals
+  value: null
+```
 ## Infracost
